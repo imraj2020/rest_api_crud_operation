@@ -46,8 +46,45 @@ class _HomeState extends State<Home> {
         ),
         itemCount: productcontroller.products.length,
         itemBuilder: (context, index) {
-          var products = productcontroller.products[index];
-          return ProductWidget(  product: products,
+          var myproducts = productcontroller.products[index];
+          return ProductWidget(
+            // onDelete: () {
+            //   productcontroller.DeleteProduct(myproducts.sId.toString()).then((value) async {
+            //     if (value) {
+            //       await productcontroller.fetchProducts();
+            //       setState(() {});
+            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //         content: Text('Product Deleted'),
+            //         duration: Duration(seconds: 2),
+            //       ));
+            //     } else {
+            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //         content: Text('Something wrong...!'),
+            //         duration: Duration(seconds: 2),
+            //       ));
+            //     }
+            //   });
+            // },
+
+            onDelete: () async {
+
+
+              try{
+                await productcontroller.DeleteProduct(myproducts.sId.toString());
+                await productcontroller.fetchProducts();
+                setState(() {});
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Product Deleted'),
+                  duration: Duration(seconds: 2),
+                ));
+              }catch(e){
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Something went wrong'+e.toString()),
+                  duration: Duration(seconds: 2),
+                ));
+              }
+            },
+            product: myproducts,
       );
         },
       ),

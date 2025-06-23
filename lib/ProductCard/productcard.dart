@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rest_api_crud_operation/Model/ProductModel.dart';
 import 'package:http/http.dart' as http;
+import 'package:rest_api_crud_operation/Home.dart';
 class ProductWidget extends StatefulWidget {
   final Data product;
-
-  const ProductWidget({super.key, required this.product});
+  final VoidCallback onDelete;
+  const ProductWidget({super.key,required this.onDelete, required this.product});
 
   @override
   State<StatefulWidget> createState() {
@@ -51,7 +52,7 @@ class _ProductWidget extends State<ProductWidget> {
               children: [
                 IconButton(onPressed: () {}, icon: Icon(Icons.edit, color: Colors.orange)),
                 SizedBox(width: 5),
-                IconButton(onPressed: () {}, icon: Icon(Icons.delete, color: Colors.red)),
+                IconButton(onPressed:widget.onDelete, icon: Icon(Icons.delete, color: Colors.red)),
               ],
             ),
           ),

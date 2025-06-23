@@ -19,12 +19,16 @@ class ProductController {
   }
 
 
-  // Future<void> deleteProduct(int id) async {
-  //   final response = await http.delete(Uri.parse('$baseUrl/$id'));
-  //   if (response.statusCode != 204) {
-  //     throw Exception('Failed to delete product');
-  //   }
-  // }
+  Future<bool> DeleteProduct(String productId) async{
+
+    final response = await http.get(Uri.parse(urls.deleteProduct(productId)));
+    if(response.statusCode == 200){
+      fetchProducts();
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
 
 
