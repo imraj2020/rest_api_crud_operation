@@ -48,23 +48,6 @@ class _HomeState extends State<Home> {
         itemBuilder: (context, index) {
           var myproducts = productcontroller.products[index];
           return ProductWidget(
-            // onDelete: () {
-            //   productcontroller.DeleteProduct(myproducts.sId.toString()).then((value) async {
-            //     if (value) {
-            //       await productcontroller.fetchProducts();
-            //       setState(() {});
-            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //         content: Text('Product Deleted'),
-            //         duration: Duration(seconds: 2),
-            //       ));
-            //     } else {
-            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //         content: Text('Something wrong...!'),
-            //         duration: Duration(seconds: 2),
-            //       ));
-            //     }
-            //   });
-            // },
 
             onDelete: () async {
 
