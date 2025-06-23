@@ -70,6 +70,7 @@ class _HomeState extends State<Home> {
 
 
               try{
+
                 await productcontroller.DeleteProduct(myproducts.sId.toString());
                 await productcontroller.fetchProducts();
                 setState(() {});
