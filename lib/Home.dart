@@ -68,7 +68,6 @@ class _HomeState extends State<Home> {
 
             onDelete: () async {
 
-
               try{
 
                 await productcontroller.DeleteProduct(myproducts.sId.toString());
