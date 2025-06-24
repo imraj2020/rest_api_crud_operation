@@ -34,18 +34,22 @@ class _ProductCardState extends State<ProductCard> {
     _isVideo = _checkIfVideo(widget.product.img.toString());
 
     if (_isVideo) {
-      _videoController = VideoPlayerController.network(widget.product.img.toString())
-        ..initialize().then((_) {
-          setState(() {
-            _isVideoInitialized = true;
-            _videoController?.setLooping(true);
-            _videoController?.play();
-          });
-        }).catchError((error) {
-          setState(() {
-            _isVideoInitialized = false;
-          });
-        });
+      _videoController = VideoPlayerController.network(
+          widget.product.img.toString(),
+        )
+        ..initialize()
+            .then((_) {
+              setState(() {
+                _isVideoInitialized = true;
+                _videoController?.setLooping(true);
+                _videoController?.play();
+              });
+            })
+            .catchError((error) {
+              setState(() {
+                _isVideoInitialized = false;
+              });
+            });
     }
   }
 
@@ -75,25 +79,26 @@ class _ProductCardState extends State<ProductCard> {
               borderRadius: BorderRadius.circular(10),
               child: Container(
                 height: 120,
-                width: double.infinity,
+
                 color: Colors.blueAccent,
-                child: _isVideo
-                    ? _isVideoInitialized
-                    ? AspectRatio(
-                  aspectRatio: _videoController!.value.aspectRatio,
-                  child: VideoPlayer(_videoController!),
-                )
-                    : Center(child: CircularProgressIndicator())
-                    : Image.network(
-                  widget.product.img.toString(),
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.network(
-                      'https://www.shutterstock.com/image-illustration/parcel-box-exclamation-mark-about-260nw-2377273621.jpg',
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
+                child:
+                    _isVideo
+                        ? _isVideoInitialized
+                            ? AspectRatio(
+                              aspectRatio: _videoController!.value.aspectRatio,
+                              child: VideoPlayer(_videoController!),
+                            )
+                            : Center(child: CircularProgressIndicator())
+                        : Image.network(
+                          widget.product.img.toString(),
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.network(
+                              'https://www.shutterstock.com/image-illustration/parcel-box-exclamation-mark-about-260nw-2377273621.jpg',
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
               ),
             ),
             Padding(
@@ -105,9 +110,10 @@ class _ProductCardState extends State<ProductCard> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     'Price: ${widget.product.unitPrice ?? 0} | QTY : ${widget.product.qty ?? 0}',
@@ -141,4 +147,3 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 }
-
