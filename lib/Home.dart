@@ -155,13 +155,13 @@ class _HomeState extends State<Home> {
               crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              mainAxisExtent: 270,
+             mainAxisExtent: 270,
               // Removed childAspectRatio
             ),
             itemCount: productcontroller.products.length,
             itemBuilder: (context, index) {
               var myproducts = productcontroller.products[index];
-              return ProductWidget(
+              return ProductCard(
                 onDelete: () async {
                   try {
                     await productcontroller.DeleteProduct(
