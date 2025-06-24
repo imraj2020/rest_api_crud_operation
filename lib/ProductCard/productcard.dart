@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:rest_api_crud_operation/Model/ProductModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:rest_api_crud_operation/Home.dart';
+
 class ProductWidget extends StatefulWidget {
   final Data product;
   final VoidCallback onDelete;
-  const ProductWidget({super.key,required this.onDelete, required this.product});
+  final VoidCallback onEdit;
+
+  const ProductWidget({
+    super.key,
+    required this.onEdit,
+    required this.onDelete,
+    required this.product,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -20,13 +28,11 @@ class _ProductWidget extends State<ProductWidget> {
       child: Column(
         children: [
           Container(
-            height: 140,
+            height: 150,
             child: Image.network(
-               widget.product.img.toString(),
+              widget.product.img.toString(),
 
               // 'https://adminapi.applegadgetsbd.com/storage/media/large/3408-34138.jpg', // image url
-
-
               fit: BoxFit.cover,
             ),
           ),
@@ -36,11 +42,13 @@ class _ProductWidget extends State<ProductWidget> {
               children: [
                 Text(
                   widget.product.productName ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
                 Text(
                   'Price: ${widget.product.unitPrice ?? 0} | QTY : ${widget.product.qty ?? 0}',
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                  style: TextStyle(fontSize: 10, color: Colors.black54),
                 ),
               ],
             ),
@@ -50,9 +58,15 @@ class _ProductWidget extends State<ProductWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.edit, color: Colors.orange)),
+                IconButton(
+                  onPressed: widget.onEdit,
+                  icon: Icon(Icons.edit, color: Colors.orange),
+                ),
                 SizedBox(width: 5),
-                IconButton(onPressed:widget.onDelete, icon: Icon(Icons.delete, color: Colors.red)),
+                IconButton(
+                  onPressed: widget.onDelete,
+                  icon: Icon(Icons.delete, color: Colors.red),
+                ),
               ],
             ),
           ),
