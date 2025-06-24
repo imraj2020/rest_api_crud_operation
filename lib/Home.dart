@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
       String? img,
       int? qty,
       int? unitPrice,
-      int? totalPrice,
+      int? totalPrice, required bool isupdate,
     }) {
       TextEditingController productNameController = TextEditingController();
       TextEditingController productQTYController = TextEditingController();
@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
         builder:
             (context) => SingleChildScrollView(
               child: AlertDialog(
-                title: Text('Edit product'),
+                title: Text(isupdate ? 'Edit product' : 'Add product'),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                         ElevatedButton(
                           onPressed: () async {
                             try {
-                              await productcontroller.UpdateProduct(
+                              await productcontroller.CreateUpdateProduct(
                                 productNameController.text,
                                 productImageController.text,
                                 int.parse(productQTYController.text.trim()),
@@ -106,10 +106,11 @@ class _HomeState extends State<Home> {
                                   productTotalPriceController.text.trim(),
                                 ),
                                 id,
+                                isupdate
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('product updated '),
+                                  content:  Text(isupdate ? 'product updated ': 'Product Created'),
                                   duration: Duration(seconds: 2),
                                 ),
                               );
@@ -128,7 +129,7 @@ class _HomeState extends State<Home> {
                             await fetchProducts();
                             setState(() {});
                           },
-                          child: Text('Update Product'),
+                          child: Text(isupdate ? 'Update Product': 'Add product'),
                         ),
                       ],
                     ),
@@ -145,53 +146,70 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.orange,
         centerTitle: true,
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.6,
-        ),
-        itemCount: productcontroller.products.length,
-        itemBuilder: (context, index) {
-          var myproducts = productcontroller.products[index];
-          return ProductWidget(
-            onDelete: () async {
-              try {
-                await productcontroller.DeleteProduct(
-                  myproducts.sId.toString(),
-                );
-                await productcontroller.fetchProducts();
-                setState(() {});
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Product Deleted'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Something went wrong' + e.toString()),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              }
-            },
+      body: Column(
+        children: [
+        Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              mainAxisExtent: 270,
+              // Removed childAspectRatio
+            ),
+            itemCount: productcontroller.products.length,
+            itemBuilder: (context, index) {
+              var myproducts = productcontroller.products[index];
+              return ProductWidget(
+                onDelete: () async {
+                  try {
+                    await productcontroller.DeleteProduct(
+                      myproducts.sId.toString(),
+                    );
+                    await productcontroller.fetchProducts();
+                    setState(() {});
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Product Deleted'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Something went wrong' + e.toString()),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                },
 
-            onEdit: () {
-              ProductDialogue(
-                name: myproducts.productName,
-                img: myproducts.img,
-                id: myproducts.sId,
-                unitPrice: myproducts.unitPrice,
-                totalPrice: myproducts.totalPrice,
-                qty: myproducts.qty,
+                onEdit: () {
+                  ProductDialogue(
+                    name: myproducts.productName,
+                    img: myproducts.img,
+                    id: myproducts.sId,
+                    unitPrice: myproducts.unitPrice,
+                    totalPrice: myproducts.totalPrice,
+                    qty: myproducts.qty,
+                      isupdate: true,
+                  );
+                },
+
+                product: myproducts,
               );
             },
+          ),
+        ),
+      ],),
 
-            product: myproducts,
-          );
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ProductDialogue(isupdate: false);
         },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.orange,
       ),
     );
   }

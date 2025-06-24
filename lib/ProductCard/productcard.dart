@@ -25,15 +25,29 @@ class _ProductWidget extends State<ProductWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.circular(12), // card corner radius
+      ),
       child: Column(
         children: [
-          Container(
-            height: 150,
-            child: Image.network(
-              widget.product.img.toString(),
-
-              // 'https://adminapi.applegadgetsbd.com/storage/media/large/3408-34138.jpg', // image url
-              fit: BoxFit.cover,
+          // Clip the image to the same (or slightly smaller) radius
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              height: 130,
+              color: Colors.blueAccent, // match background if image has transparency
+              child: Image.network(
+                widget.product.img.toString(),
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                  return Image.network(
+                    'https://www.shutterstock.com/image-illustration/parcel-box-exclamation-mark-about-260nw-2377273621.jpg',
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
             ),
           ),
           Padding(
@@ -48,6 +62,8 @@ class _ProductWidget extends State<ProductWidget> {
                 ),
                 Text(
                   'Price: ${widget.product.unitPrice ?? 0} | QTY : ${widget.product.qty ?? 0}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 10, color: Colors.black54),
                 ),
               ],
@@ -73,5 +89,6 @@ class _ProductWidget extends State<ProductWidget> {
         ],
       ),
     );
+
   }
 }

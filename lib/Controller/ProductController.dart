@@ -30,8 +30,8 @@ class ProductController {
     }
   }
 
-  Future<bool>UpdateProduct(String productName,String img,int qty,int UnitPrice,int totalPrice,String ? productId) async {
-    final response = await http.post(Uri.parse(urls.updateProduct(productId!)),
+  Future<bool>CreateUpdateProduct(String productName,String img,int qty,int UnitPrice,int totalPrice,String ? productId,bool isUpdate) async {
+    final response = await http.post(Uri.parse(isUpdate ? urls.updateProduct(productId!) : urls.createProduct),
         headers: { 'Content-Type': 'application/json'},
         body: jsonEncode({
           "ProductName": productName,
@@ -49,6 +49,9 @@ class ProductController {
       return false;
     }
   }
+
+
+
 
 
 }
